@@ -114,6 +114,8 @@ impl Level {
 
         push_optional_filter!(query, params.min_attempts, " AND attempts >= ");
         push_optional_filter!(query, params.max_attempts, " AND attempts <= ");
+        push_optional_filter!(query, params.min_footprints, " AND footprints >= ");
+        push_optional_filter!(query, params.max_footprints, " AND footprints <= ");
         push_optional_filter!(query, params.min_clearcheck_ms, " AND clearcheck_ms >= ");
         push_optional_filter!(query, params.max_clearcheck_ms, " AND clearcheck_ms <= ");
         push_optional_filter!(query, &params.style, " AND style =  ");
@@ -181,6 +183,8 @@ pub struct FilterParams {
     pub year: i64,
     pub min_attempts: Option<i64>,
     pub max_attempts: Option<i64>,
+    pub min_footprints: Option<i64>,
+    pub max_footprints: Option<i64>,
     pub min_clearcheck_ms: Option<i64>,
     pub max_clearcheck_ms: Option<i64>,
     pub style: Option<Style>,
