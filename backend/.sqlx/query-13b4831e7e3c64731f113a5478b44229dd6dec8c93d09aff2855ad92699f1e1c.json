@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO levels_smm2 (\n                id,\n                year,\n                title,\n                description,\n                uploaded_at,\n                clearcheck_ms,\n                attempts,\n                footprints,\n                likes,\n                boos,\n                comments,\n                clear_condition,\n                style,\n                theme,\n                tags\n            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)\n            ON CONFLICT DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int8",
+        "Text",
+        "Text",
+        "Timestamptz",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Int8",
+        "Text",
+        "Text",
+        "Text",
+        "TextArray"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "13b4831e7e3c64731f113a5478b44229dd6dec8c93d09aff2855ad92699f1e1c"
+}

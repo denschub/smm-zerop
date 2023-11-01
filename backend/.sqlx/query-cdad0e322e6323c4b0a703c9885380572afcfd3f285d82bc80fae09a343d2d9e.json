@@ -1,0 +1,12 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM levels_smm1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": []
+  },
+  "hash": "cdad0e322e6323c4b0a703c9885380572afcfd3f285d82bc80fae09a343d2d9e"
+}
