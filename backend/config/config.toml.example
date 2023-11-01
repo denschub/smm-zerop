@@ -9,7 +9,7 @@ max_connections = 1
 [level_importer]
 run_inline = true
 interval = 3600
-user_agent = "ZeroPercentDashboard/1.0 (ping @denschub on Discord)"
+user_agent = "ZeroPercentDashboard (ping @denschub on Discord)"
 accept_invalid_ssl = false
 
 csv_urls_smm1 = ["http://localhost:3000/SMM1-Google-Sheet.csv"]
