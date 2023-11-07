@@ -1,0 +1,10 @@
+---
+import Base from "@layouts/Base.astro";
+import Smm1RandomLevel from "@components/react/smm1_random_level";
+import NoScriptBox from "@components/static/noscript_box.astro";
+---
+
+<Base title="Random Uncleared Level - SMM1" headline="Random Uncleared Level - SMM1">
+  <Smm1RandomLevel client:only="react" />
+  <NoScriptBox />
+</Base>

@@ -1,0 +1,57 @@
+---
+import Base from "@layouts/Base.astro";
+---
+
+<Base title="About" headline="About This and That">
+  <section class="box">
+    <h2>What?</h2>
+    <p>
+      This site aims to be a collection of tools used by the Team 0% community. At the moment, this provides a way to
+      find random uncleared levels for SMM1 and SMM2, but maybe there'll be more in the future.
+    </p>
+    <p>
+      Team 0% is a group of people with the goal of clearing all uncleared levels in SMM1 and SMM2. In short, the goal
+      is that there are no more levels with a 0% clear rate!
+    </p>
+  </section>
+  <section class="box">
+    <h2>Who?</h2>
+    <p>
+      Team 0% is an open community. Everyone can join! You're automagically part of us if you clear any of the still
+      uncleared levels. But if you want, <a href="https://discord.gg/dw7WKs8" target="_blank">join our Discord</a>!
+    </p>
+    <p>
+      This application is built and maintained by <a href="https://overengineer.dev/" target-"_blank">this guy</a> -
+      ping me on Discord (@denschub) if you have any questions, problems, or ideas.
+    </p>
+  </section>
+  <section class="box">
+    <h2>How?</h2>
+    <p>
+      This app crawls a bunch of different sources, including <a href="https://mm2.thecryptan.com/" target="_blank"
+        >the database made available by TheCryptan</a
+      >, the Level API built by <a href="https://tgrcode.com/mm2/docs/" target="_blank">TheGreatRambler</a>, and the
+      Google Sheets available in the Team 0% Discord.
+    </p>
+    <p>
+      This project was inspried by a <a href="https://knflrpn.com/mm2/index.html" target="_blank"
+        >similar, SMM2-only app built by KNfLrPn</a
+      >. Thank you!
+    </p>
+  </section>
+  <section class="box">
+    <h2>Why am I seeing already cleared levels?</h2>
+    <p>
+      Sorry for that. This happens. We might not always know that a level was cleared, or the dashboard might not have
+      imported the latest dataset yet. Or the dataset might just not be ideal. I'm working on improving the data quality
+      here, but for now, please just use this dashboards button to mark a level as cleared and move on.
+    </p>
+  </section>
+  <section class="box">
+    <h2>Can I contribute to this app?</h2>
+    <p>
+      The source code is <a href="https://0b101010.codes/playground/smm-zerop" target="_blank">available here</a>. If
+      you want to contribute, please reach out to @denschub on Discord first to make sure no efforts end up wasted!
+    </p>
+  </section>
+</Base>
