@@ -29,7 +29,7 @@ export default function ThumbnailLoader({ alt, levelId }: ThumbnailLoaderProps) 
       <div className="image-spinner-container">
         <div className="image-spinner">
           {loading && <i className="fa-duotone fa-fw fa-spinner-third fa-spin"></i>}
-          {errored && <i className="fa-solid fa-fw fa-wifi-exclamation"></i>}
+          {errored && <i className="fa-solid fa-fw fa-cloud-question"></i>}
         </div>
       </div>
     </div>
