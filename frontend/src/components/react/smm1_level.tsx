@@ -1,4 +1,5 @@
 import { formatISODate, formatSmm1LevelId } from "src/helpers";
+import ClickableCourseId from "./clickable_course_id";
 
 interface Smm1LevelProps {
   level: any; // [ToDO] I really should define this, but... lazy.
@@ -28,10 +29,7 @@ export default function Smm1Level({ level }: Smm1LevelProps) {
             <p className="header">Attempts</p>
             <p className="content-large">{level.attempts}</p>
           </div>
-          <div className="text-box">
-            <p className="header">Course ID</p>
-            <p className="content-large">{formatSmm1LevelId(level.id)}</p>
-          </div>
+          <ClickableCourseId levelId={formatSmm1LevelId(level.id)} />
         </div>
       </div>
 

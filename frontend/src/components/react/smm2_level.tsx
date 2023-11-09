@@ -1,5 +1,6 @@
 import { formatClearcheckMs, formatHHMMTime, formatISODate, formatSmm2LevelId, formatTagName } from "src/helpers";
 import ThumbnailLoader from "./thumbnail_loader";
+import ClickableCourseId from "./clickable_course_id";
 
 interface Smm2LevelProps {
   level: any; // [ToDO] I really should define this, but... lazy.
@@ -57,10 +58,7 @@ export default function Smm2Level({ level }: Smm2LevelProps) {
             <p className="header">Attempts</p>
             <p className="content-large">{level.attempts}</p>
           </div>
-          <div className="text-box">
-            <p className="header">Course ID</p>
-            <p className="content-large">{formatSmm2LevelId(level.id)}</p>
-          </div>
+          <ClickableCourseId levelId={formatSmm2LevelId(level.id)} />
         </div>
       </div>
       <div className="level-actions">
