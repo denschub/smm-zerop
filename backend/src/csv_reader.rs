@@ -1,4 +1,4 @@
-use tracing::error;
+use anyhow::bail;
 
 #[tracing::instrument(skip(reader))]
 pub fn read_csv<
@@ -8,16 +8,13 @@ pub fn read_csv<
 >(
     reader: Reader,
 ) -> anyhow::Result<Vec<Output>> {
-    let mut csv_reader = csv::Reader::from_reader(reader);
-    Ok(csv_reader
-        .deserialize::<Input>()
-        .filter_map(|r| match r {
-            Ok(row) => Some(row),
-            Err(err) => {
-                error!("{:?}", err);
-                None
-            }
-        })
-        .map(|r| r.into())
-        .collect())
+    let mut output = vec![];
+    for row in csv::Reader::from_reader(reader).deserialize::<Input>() {
+        match row {
+            Ok(parsed) => output.push(parsed.into()),
+            Err(err) => bail!("parsing failed: {}", err),
+        }
+    }
+
+    Ok(output)
 }
