@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use anyhow::bail;
 use chrono::{DateTime, Datelike, Utc};
 use serde::Deserialize;
 use tracing::info;
@@ -101,6 +102,12 @@ impl From<CsvRow> for Level {
 pub async fn run(app_state: Arc<AppState>) -> anyhow::Result<()> {
     info!("loading levels...");
     let parsed_levels = load_levels(&app_state.config.level_importer).await?;
+
+    let levels_count = parsed_levels.len();
+    if levels_count < 1 {
+        bail!("got empty levels list, bailing")
+    }
+
     let mut db_transaction = app_state.database.begin().await?;
 
     info!("deleting...");
@@ -116,7 +123,7 @@ pub async fn run(app_state: Arc<AppState>) -> anyhow::Result<()> {
     info!("committing...");
     db_transaction.commit().await?;
 
-    info!("done!");
+    info!("done, imported {} levels!", levels_count);
     Ok(())
 }
 
