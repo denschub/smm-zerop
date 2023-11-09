@@ -2,11 +2,12 @@ use std::sync::Arc;
 
 use chrono::{Datelike, NaiveDate};
 use serde::Deserialize;
-use tracing::{error, info};
+use tracing::info;
 
 use crate::{
     app_config::LevelImporterConfig,
     app_state::AppState,
+    csv_reader::read_csv,
     deserializers::{gsheets_csv_date_format, thousands_seperated_integer},
 };
 
@@ -88,7 +89,7 @@ async fn load_levels(importer_config: &LevelImporterConfig) -> anyhow::Result<Ve
     Ok(levels)
 }
 
-#[tracing::instrument()]
+#[tracing::instrument(skip(importer_config))]
 async fn parse_csv(url: &str, importer_config: &LevelImporterConfig) -> anyhow::Result<Vec<Level>> {
     let client = reqwest::Client::builder()
         .danger_accept_invalid_certs(importer_config.accept_invalid_ssl)
@@ -97,17 +98,5 @@ async fn parse_csv(url: &str, importer_config: &LevelImporterConfig) -> anyhow::
         .expect("passed parameters are known to be set");
 
     let csv_data = client.get(url).send().await?.text().await?;
-    let mut csv_reader = csv::Reader::from_reader(csv_data.as_bytes());
-
-    Ok(csv_reader
-        .deserialize::<CsvRow>()
-        .filter_map(|r| match r {
-            Ok(row) => Some(row),
-            Err(err) => {
-                error!("{:?}", err);
-                None
-            }
-        })
-        .map(|r| r.into())
-        .collect())
+    read_csv::<_, CsvRow, _>(csv_data.as_bytes())
 }
