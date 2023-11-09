@@ -10,6 +10,11 @@ import Base from "@layouts/Base.astro";
         You can now click on a Course ID to copy it to your clipboard. Useful if you want to paste it into Discord, a
         text editor, or anywhere else, really.
       </li>
+      <li>
+        There was a rare edge-case in the component that imported the level database, which resulted in the database
+        being completely empty for a couple of minutes. According to the logs, not a single user was affected by this -
+        but this fixed now either way.
+      </li>
     </ul>
   </section>
 </Base>
