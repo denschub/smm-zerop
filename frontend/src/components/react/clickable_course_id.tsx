@@ -17,7 +17,7 @@ export default function ClickableCourseId({ levelId }: ClickableCourseIdProps) {
     };
   }, []);
 
-  const boxClick: React.MouseEventHandler<HTMLDivElement> = (ev) => {
+  const boxClick: React.MouseEventHandler<HTMLDivElement> = () => {
     if (payloadRef.current) {
       navigator.clipboard.writeText(payloadRef.current.innerText.trim());
 
