@@ -37,7 +37,7 @@ export default function Smm2Level({ level }: Smm2LevelProps) {
             </li>
           </ul>
           <p>
-            <i className="fa-solid fa-gamepad" title="Style"></i> {level.style}
+            <i className="fa-solid fa-gamepad" title="Game style"></i> {level.style}
           </p>
           <p>
             <i className="fa-solid fa-stopwatch" title="Clear check time"></i> {formatClearcheckMs(level.clearcheck_ms)}
