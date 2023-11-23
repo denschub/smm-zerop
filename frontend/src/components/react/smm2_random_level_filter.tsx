@@ -3,6 +3,7 @@ import FancySelect from "./fancy_select";
 
 export type Smm2LevelFilters = {
   year: string;
+  style?: string;
   min_attempts?: string;
   max_attempts?: string;
   min_clearcheck_ms?: string;
@@ -24,6 +25,15 @@ interface Smm2RandomLevelFilterOnChange {
 }
 
 const availableYears = [["2020", "2020"]];
+
+const availableStyles = [
+  ["", "Any"],
+  ["smb1", "SMB1"],
+  ["smb3", "SMB3"],
+  ["smw", "SMW"],
+  ["nsmbu", "NSMBU"],
+  ["sm3dw", "SM3DW"],
+];
 
 const attemptOptions = [
   ["", "All"],
@@ -65,6 +75,22 @@ export default function Smm2RandomLevelFilter({ onChange }: Smm2RandomLevelFilte
               return {
                 ...prev,
                 year: value,
+              };
+            });
+          }}
+        />
+
+        <label htmlFor="style" className="caption">
+          Game style
+        </label>
+        <FancySelect
+          id="style"
+          options={availableStyles}
+          onChange={(value) => {
+            setSelectedFilters((prev) => {
+              return {
+                ...prev,
+                style: value,
               };
             });
           }}
