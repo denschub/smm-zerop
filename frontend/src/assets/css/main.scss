@@ -200,6 +200,10 @@ section.box {
   margin-top: 1.5rem;
   padding: var(--content-box-padding) var(--content-box-padding) calc(var(--content-box-padding) * 1.5);
 
+  &.alert-box {
+    border: 5px solid red;
+  }
+
   h2 {
     color: var(--main-text-color);
     margin: 0 0 1rem;

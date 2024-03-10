@@ -39,6 +39,18 @@ if (Astro.props.title) {
         <h1>{Astro.props.headline}</h1>
       </header>
 
+      <section class="box alert-box">
+        <h2>Warning: Outdated data!</h2>
+        <p>
+          Due to technical issues in the data source used here, this dashboard will show outdated data, and it will show
+          you levels that have already been cleared.
+        </p>
+        <p>
+          The fix is complicated and involves multiple people, so it might take a while. This will be fixed as soon as
+          possible. Sorry for that.
+        </p>
+      </section>
+
       <slot />
 
       <footer>
