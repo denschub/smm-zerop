@@ -9,7 +9,7 @@ export type Smm1LevelFilters = {
 
 export function getDefaultSmm1LevelFilters(): Smm1LevelFilters {
   return {
-    year: "2016",
+    year: "2017",
   };
 }
 
@@ -22,7 +22,6 @@ interface Smm1RandomLevelFilterOnChange {
 }
 
 const availableYears = [
-  ["2016", "2016"],
   ["2017", "2017"],
   ["2018", "2018"],
   ["2019", "2019"],
