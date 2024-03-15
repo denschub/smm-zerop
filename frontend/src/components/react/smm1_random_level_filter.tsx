@@ -21,12 +21,7 @@ interface Smm1RandomLevelFilterOnChange {
   (newFilters: Smm1LevelFilters): void;
 }
 
-const availableYears = [
-  ["2017", "2017"],
-  ["2018", "2018"],
-  ["2019", "2019"],
-  ["2020", "2020"],
-];
+const availableYears = [["2017", "2017"]];
 
 const attemptOptions = [
   ["", "All"],
