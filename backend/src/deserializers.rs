@@ -44,7 +44,7 @@ pub mod thecryptans_csv_datetime_format {
         let s = String::deserialize(deserializer)?;
         let dt = NaiveDateTime::parse_from_str(&s, FORMAT).map_err(serde::de::Error::custom)?;
         let utc_dt = DateTime::<Utc>::from_naive_utc_and_offset(dt, Utc);
-        Ok(utc_dt - Duration::hours(6))
+        Ok(utc_dt - Duration::try_hours(6).expect("building with static parameters never fails"))
     }
 }
 

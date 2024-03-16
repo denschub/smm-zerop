@@ -15,7 +15,7 @@ use smm_zerop_backend::{
     games::{smm1, smm2},
 };
 use sqlx::postgres::PgPoolOptions;
-use tokio::time::sleep;
+use tokio::{net::TcpListener, time::sleep};
 use tower_http::cors::{self, CorsLayer};
 use tracing::{error, info};
 
@@ -98,9 +98,8 @@ async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
         .layer(cors_layer)
         .with_state(app_state.clone());
 
-    axum::Server::bind(&app_state.config.api_server.listen)
-        .serve(app.into_make_service())
-        .await?;
+    let listener = TcpListener::bind(&app_state.config.api_server.listen).await?;
+    axum::serve(listener, app.into_make_service()).await?;
 
     Ok(())
 }
