@@ -399,12 +399,6 @@ footer {
   }
 }
 
-.smm1 {
-  .two-col div {
-    flex-basis: auto;
-  }
-}
-
 @media (max-width: 550px) {
   .fancyselect-list {
     grid-template-columns: 1fr;
