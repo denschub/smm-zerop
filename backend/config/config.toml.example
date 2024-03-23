@@ -12,7 +12,6 @@ interval = 3600
 user_agent = "ZeroPercentDashboard (ping @denschub on Discord)"
 accept_invalid_ssl = false
 
-csv_urls_smm1 = ["http://localhost:3000/SMM1-Google-Sheet.csv"]
 csv_urls_smm2 = [
   "http://localhost:3000/SMM2-2019-Uncleared.csv",
   "http://localhost:3000/SMM2-2020-Uncleared.csv",

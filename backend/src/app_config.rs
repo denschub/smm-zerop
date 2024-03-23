@@ -30,6 +30,5 @@ pub struct LevelImporterConfig {
     pub interval: u64,
     pub user_agent: String,
     pub accept_invalid_ssl: bool,
-    pub csv_urls_smm1: Vec<String>,
     pub csv_urls_smm2: Vec<String>,
 }

@@ -9,11 +9,7 @@ use axum::{
     routing::get,
     Json, Router,
 };
-use smm_zerop_backend::{
-    app_config::AppConfig,
-    app_state::AppState,
-    games::{smm1, smm2},
-};
+use smm_zerop_backend::{app_config::AppConfig, app_state::AppState, games::smm2};
 use sqlx::postgres::PgPoolOptions;
 use tokio::{net::TcpListener, time::sleep};
 use tower_http::cors::{self, CorsLayer};
@@ -65,10 +61,6 @@ async fn shutdown_signal() {
 async fn level_import_loop(app_state: Arc<AppState>) {
     loop {
         let start_of_loop = chrono::Utc::now();
-        if let Err(err) = smm1::importer::run(app_state.clone()).await {
-            error!("smm1 import failed: {:?}", err);
-        }
-
         if let Err(err) = smm2::importer::run(app_state.clone()).await {
             error!("smm2 import failed: {:?}", err);
         }
@@ -93,7 +85,6 @@ async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
 
     let app = Router::new()
         .route("/__heartbeat__", get(get_heartbeat))
-        .route("/smm1/random_level", get(get_smm1_random_level))
         .route("/smm2/random_level", get(get_smm2_random_level))
         .layer(cors_layer)
         .with_state(app_state.clone());
@@ -107,27 +98,6 @@ async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
 #[tracing::instrument()]
 async fn get_heartbeat() -> impl IntoResponse {
     StatusCode::NO_CONTENT
-}
-
-#[debug_handler]
-#[tracing::instrument(skip(app_state))]
-async fn get_smm1_random_level(
-    params: Query<smm1::level::FilterParams>,
-    State(app_state): State<Arc<AppState>>,
-) -> Response {
-    let random_level_result =
-        smm1::level::Level::get_random_level(&app_state.database, &params).await;
-
-    if let Err(err) = random_level_result {
-        error!("{:?}", err);
-        return StatusCode::INTERNAL_SERVER_ERROR.into_response();
-    }
-
-    if let Ok(Some(result)) = random_level_result {
-        return Json(result).into_response();
-    }
-
-    StatusCode::NOT_FOUND.into_response()
 }
 
 #[debug_handler]
