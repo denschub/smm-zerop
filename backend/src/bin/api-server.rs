@@ -11,7 +11,7 @@ use axum::{
 };
 use smm_zerop_backend::{app_config::AppConfig, app_state::AppState, games::smm2};
 use sqlx::postgres::PgPoolOptions;
-use tokio::net::TcpListener;
+use tokio::{net::TcpListener, signal};
 use tower_http::cors::{self, CorsLayer};
 use tracing::error;
 
@@ -42,18 +42,28 @@ async fn main() -> anyhow::Result<()> {
     };
     let app_state_arc = Arc::new(app_state);
 
-    tokio::select! {
-        _ = shutdown_signal() => {},
-        _ = run_http_server(app_state_arc.clone()) => {},
-    }
-
-    Ok(())
+    run_http_server(app_state_arc.clone()).await
 }
 
 async fn shutdown_signal() {
-    tokio::signal::ctrl_c()
-        .await
-        .expect("Failed to install CTRL+C signal handler");
+    let sigint = async {
+        signal::unix::signal(signal::unix::SignalKind::interrupt())
+            .expect("creating SIGINT handler should not fail")
+            .recv()
+            .await;
+    };
+
+    let sigterm = async {
+        signal::unix::signal(signal::unix::SignalKind::terminate())
+            .expect("creating SIGTERM handler should not fail")
+            .recv()
+            .await;
+    };
+
+    tokio::select! {
+        () = sigint => {},
+        () = sigterm => {},
+    }
 }
 
 async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
@@ -68,7 +78,9 @@ async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
         .with_state(app_state.clone());
 
     let listener = TcpListener::bind(&app_state.config.api_server.listen).await?;
-    axum::serve(listener, app.into_make_service()).await?;
+    axum::serve(listener, app.into_make_service())
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
 
     Ok(())
 }
