@@ -1,4 +1,4 @@
-FROM debian:bookworm as builder
+FROM debian:bookworm AS builder
 RUN apt-get update && \
     apt-get install -y build-essential curl git && \
     curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal
@@ -17,7 +17,7 @@ RUN \
     rm -rf /var/lib/apt/lists/*
 
 USER app:app
-COPY --from=builder /app/out/bin/smm-zerop-backend /app
+COPY --from=builder /app/out/bin/* /app
 
 EXPOSE 8081
-CMD ["/app/smm-zerop-backend", "/app/config/config.toml"]
+CMD ["/app/api-server", "/app/config/config.toml"]

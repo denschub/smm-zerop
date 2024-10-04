@@ -21,7 +21,7 @@ async fn main() -> anyhow::Result<()> {
 
     let args: Vec<String> = std::env::args().collect();
     if args.len() != 2 {
-        bail!("Usage: smm-zerop-backend ./path/to/config.toml");
+        bail!("Usage: api-server ./path/to/config.toml");
     }
 
     let config_file_contents =
