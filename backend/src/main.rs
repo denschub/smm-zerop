@@ -1,4 +1,4 @@
-use std::{sync::Arc, time::Duration};
+use std::sync::Arc;
 
 use anyhow::{bail, Context};
 use axum::{
@@ -11,9 +11,9 @@ use axum::{
 };
 use smm_zerop_backend::{app_config::AppConfig, app_state::AppState, games::smm2};
 use sqlx::postgres::PgPoolOptions;
-use tokio::{net::TcpListener, time::sleep};
+use tokio::net::TcpListener;
 use tower_http::cors::{self, CorsLayer};
-use tracing::{error, info};
+use tracing::error;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -45,7 +45,6 @@ async fn main() -> anyhow::Result<()> {
     tokio::select! {
         _ = shutdown_signal() => {},
         _ = run_http_server(app_state_arc.clone()) => {},
-        _ = level_import_loop(app_state_arc.clone()), if app_config_arc.clone().level_importer.run_inline => {},
     }
 
     Ok(())
@@ -55,27 +54,6 @@ async fn shutdown_signal() {
     tokio::signal::ctrl_c()
         .await
         .expect("Failed to install CTRL+C signal handler");
-}
-
-#[tracing::instrument(skip(app_state))]
-async fn level_import_loop(app_state: Arc<AppState>) {
-    loop {
-        let start_of_loop = chrono::Utc::now();
-        if let Err(err) = smm2::importer::run(app_state.clone()).await {
-            error!("smm2 import failed: {:?}", err);
-        }
-
-        let end_of_loop = chrono::Utc::now();
-        let loop_runtime = end_of_loop - start_of_loop;
-        info!("import duration: {}", loop_runtime);
-        sleep(
-            Duration::from_secs(app_state.config.level_importer.interval)
-                - loop_runtime
-                    .to_std()
-                    .expect("loop runtime cannot be negative"),
-        )
-        .await;
-    }
 }
 
 async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {

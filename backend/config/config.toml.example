@@ -1,18 +1,6 @@
 [api_server]
 listen = "[::]:8081"
-run_importer = true
 
 [database]
 connstring = "postgres://postgres@127.0.0.1/smm-zerop"
 max_connections = 1
-
-[level_importer]
-run_inline = true
-interval = 3600
-user_agent = "ZeroPercentDashboard (ping @denschub on Discord)"
-accept_invalid_ssl = false
-
-csv_urls_smm2 = [
-  "http://localhost:3000/SMM2-2019-Uncleared.csv",
-  "http://localhost:3000/SMM2-2020-Uncleared.csv",
-]

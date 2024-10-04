@@ -7,21 +7,14 @@ edition = "2021"
 anyhow = "1"
 axum = { version = "0.7", features = ["macros"] }
 chrono = { version = "0.4", features = ["serde"] }
-csv = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-serde_repr = "0.1"
 serde_with = "3"
 tokio = { version = "1", features = ["full"] }
 toml = "0.8"
 tower-http = { version = "0.6", features = ["cors"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
-
-[dependencies.reqwest]
-version = "0.12"
-default-features = false
-features = ["rustls-tls-native-roots", "stream"]
 
 [dependencies.sqlx]
 version = "0.8"
