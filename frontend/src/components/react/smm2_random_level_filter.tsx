@@ -24,7 +24,11 @@ interface Smm2RandomLevelFilterOnChange {
   (newFilters: Smm2LevelFilters): void;
 }
 
-const availableYears = [["2020", "2020"]];
+const availableYears = [
+  ["2020", "2020"],
+  ["2021", "2021"],
+  ["2022", "2022"],
+];
 
 const availableStyles = [
   ["", "Any"],
