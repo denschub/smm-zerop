@@ -1,4 +1,5 @@
 .astro/
+.env*.local
 dist/
 node_modules/
 

@@ -1,12 +1,48 @@
 import { formatClearcheckMs, formatHHMMTime, formatISODate, formatSmm2LevelId, formatTagName } from "src/helpers";
 import ThumbnailLoader from "./thumbnail_loader";
 import ClickableCourseId from "./clickable_course_id";
+import { useMutation } from "@tanstack/react-query";
 
 interface Smm2LevelProps {
   level: any; // [ToDO] I really should define this, but... lazy.
 }
 
+function getMarkClearButtonLabel(status: string): string {
+  switch (status) {
+    case "pending":
+      return "Working...";
+    case "success":
+      return "Done! :)";
+    case "error":
+      return "Failed! :(";
+    default:
+      return "Mark as Cleared";
+  }
+}
+
 export default function Smm2Level({ level }: Smm2LevelProps) {
+  const markClearMutation = useMutation({
+    mutationKey: ["/smm2/mark_cleared", level.id],
+    mutationFn: async () => {
+      const res = await fetch(`${import.meta.env.PUBLIC_SMM_ZEROP_API_ROOT}/smm2/mark_cleared`, {
+        method: "POST",
+        body: JSON.stringify({
+          level_id: level.id,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = {
+          status: "err",
+          responseCode: res.status,
+          data: await res.text(),
+        };
+        console.error("markClearMutation failed", data);
+        return Promise.reject(data);
+      }
+    },
+  });
+
   let date = new Date(level.uploaded_at);
   return (
     <section className="box level-box">
@@ -65,13 +101,23 @@ export default function Smm2Level({ level }: Smm2LevelProps) {
         <a className="button" href={`https://smm2.wizul.us/smm2/level/${formatSmm2LevelId(level.id)}`} target="_blank">
           <i className="fa-solid fa-eye"></i> Open in Viewer
         </a>
+        <button
+          className="button"
+          disabled={["loading", "success"].includes(markClearMutation.status)}
+          onClick={() => {
+            if (["loading", "success"].includes(markClearMutation.status)) {
+              return;
+            }
+
+            markClearMutation.mutate();
+          }}
+        >
+          <i className="fa-solid fa-flag-pennant"></i> {getMarkClearButtonLabel(markClearMutation.status)}
+        </button>
         {/*
          * [ToDo]: This is currently commented out as there is no backend support.
          *   <button className="button">
          *     <i className="fa-solid fa-hand"></i> I'm working on it!
-         *   </button>
-         *   <button className="button">
-         *     <i className="fa-solid fa-flag-pennant"></i> It's cleared!
          *   </button>
          */}
       </div>
