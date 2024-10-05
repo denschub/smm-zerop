@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use chrono::{Datelike, Utc};
 use futures_util::TryStreamExt;
 use sqlx::PgPool;
@@ -91,6 +93,14 @@ pub async fn run(
     upstream_db: &mut tiberius::Client<tokio_util::compat::Compat<tokio::net::TcpStream>>,
     own_db: PgPool,
 ) -> anyhow::Result<()> {
+    let level_blocklist: HashSet<String> =
+        sqlx::query_scalar!("SELECT level_id FROM level_blocklist WHERE game = 'smm2'")
+            .fetch_all(&own_db)
+            .await?
+            .iter()
+            .cloned()
+            .collect();
+
     let mut db_transaction = own_db.begin().await?;
 
     info!("deleting current levels...");
@@ -106,6 +116,11 @@ pub async fn run(
         .into_row_stream();
     while let Some(row) = rows.try_next().await? {
         let level: Level = row.into();
+
+        if level_blocklist.contains(&level.id) {
+            continue;
+        }
+
         level.store(&mut *db_transaction).await?;
         levels_count += 1;
     }
