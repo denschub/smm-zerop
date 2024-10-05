@@ -8,6 +8,7 @@ use sqlx::postgres::PgConnectOptions;
 pub struct AppConfig {
     pub api_server: ApiServerConfig,
     pub database: DatabaseConfig,
+    pub smm2_upstream_db: Smm2UpstreamDbConfig,
 }
 
 #[derive(Debug, Deserialize)]
@@ -21,4 +22,9 @@ pub struct DatabaseConfig {
     #[serde_as(as = "DisplayFromStr")]
     pub connstring: PgConnectOptions,
     pub max_connections: u32,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Smm2UpstreamDbConfig {
+    pub connection_string: String,
 }
