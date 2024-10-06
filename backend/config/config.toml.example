@@ -5,5 +5,9 @@ listen = "[::]:8081"
 connstring = "postgres://postgres@127.0.0.1/smm-zerop"
 max_connections = 1
 
+[discord_bot_webhook]
+id = "0000000000000000000"
+token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
 [smm2_upstream_db]
 connection_string = "Server=tcp:127.0.0.1,1433; Database=SMM2; User=username; Password=password"

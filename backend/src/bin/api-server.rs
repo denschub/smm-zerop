@@ -3,13 +3,14 @@ use std::sync::Arc;
 use anyhow::{bail, Context};
 use axum::{
     debug_handler,
-    extract::{Query, State},
+    extract::{self, Query, State},
     http::StatusCode,
     response::{IntoResponse, Response},
-    routing::get,
+    routing::{get, post},
     Json, Router,
 };
-use smm_zerop_backend::{app_config::AppConfig, app_state::AppState, games::smm2};
+use serde::Deserialize;
+use smm_zerop_backend::{app_config::AppConfig, app_state::AppState, discord, games::smm2};
 use sqlx::postgres::PgPoolOptions;
 use tokio::{net::TcpListener, signal};
 use tower_http::cors::{self, CorsLayer};
@@ -74,6 +75,7 @@ async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
     let app = Router::new()
         .route("/__heartbeat__", get(get_heartbeat))
         .route("/smm2/random_level", get(get_smm2_random_level))
+        .route("/smm2/mark_cleared", post(post_smm2_mark_cleared))
         .layer(cors_layer)
         .with_state(app_state.clone());
 
@@ -109,4 +111,25 @@ async fn get_smm2_random_level(
     }
 
     StatusCode::NOT_FOUND.into_response()
+}
+
+#[derive(Debug, Deserialize)]
+struct PostSmm2MarkClearedPayload {
+    level_id: String,
+}
+
+#[debug_handler]
+#[tracing::instrument(skip(app_state))]
+async fn post_smm2_mark_cleared(
+    State(app_state): State<Arc<AppState>>,
+    extract::Json(payload): extract::Json<PostSmm2MarkClearedPayload>,
+) -> Response {
+    if payload.level_id.len() != 9 {
+        return (StatusCode::BAD_REQUEST, "invalid level id").into_response();
+    }
+
+    match discord::post_clear(&app_state.config.discord_bot_webhook, &payload.level_id).await {
+        Ok(_) => StatusCode::NO_CONTENT.into_response(),
+        Err(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg.to_string()).into_response(),
+    }
 }

@@ -24,8 +24,12 @@ export default function Smm2Level({ level }: Smm2LevelProps) {
   const markClearMutation = useMutation({
     mutationKey: ["/smm2/mark_cleared", level.id],
     mutationFn: async () => {
+      const headers = new Headers();
+      headers.append("content-type", "application/json");
+
       const res = await fetch(`${import.meta.env.PUBLIC_SMM_ZEROP_API_ROOT}/smm2/mark_cleared`, {
         method: "POST",
+        headers,
         body: JSON.stringify({
           level_id: level.id,
         }),

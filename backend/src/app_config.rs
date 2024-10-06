@@ -8,6 +8,7 @@ use sqlx::postgres::PgConnectOptions;
 pub struct AppConfig {
     pub api_server: ApiServerConfig,
     pub database: DatabaseConfig,
+    pub discord_bot_webhook: DiscordBotWebhookConfig,
     pub smm2_upstream_db: Smm2UpstreamDbConfig,
 }
 
@@ -22,6 +23,13 @@ pub struct DatabaseConfig {
     #[serde_as(as = "DisplayFromStr")]
     pub connstring: PgConnectOptions,
     pub max_connections: u32,
+}
+
+#[serde_as]
+#[derive(Debug, Deserialize)]
+pub struct DiscordBotWebhookConfig {
+    pub id: String,
+    pub token: String,
 }
 
 #[derive(Debug, Deserialize)]
