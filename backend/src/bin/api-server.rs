@@ -69,6 +69,7 @@ async fn shutdown_signal() {
 
 async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
     let cors_layer = CorsLayer::new()
+        .allow_headers(cors::Any)
         .allow_methods(cors::Any)
         .allow_origin(cors::Any);
 
