@@ -129,6 +129,16 @@ impl Level {
             .fetch_optional(executor)
             .await
     }
+
+    pub async fn id_exists<'a, Executor: PgExecutor<'a>>(
+        executor: Executor,
+        level_id: &str,
+    ) -> bool {
+        sqlx::query!("SELECT id FROM levels_smm2 WHERE id = $1 LIMIT 1", level_id)
+            .fetch_optional(executor)
+            .await
+            .is_ok_and(|r| r.is_some())
+    }
 }
 
 #[derive(Debug, Deserialize, sqlx::Type)]
