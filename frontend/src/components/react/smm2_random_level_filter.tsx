@@ -12,7 +12,7 @@ export type Smm2LevelFilters = {
 
 export function getDefaultSmm2LevelFilters(): Smm2LevelFilters {
   return {
-    year: "2020",
+    year: "2021",
   };
 }
 
@@ -25,7 +25,6 @@ interface Smm2RandomLevelFilterOnChange {
 }
 
 const availableYears = [
-  ["2020", "2020"],
   ["2021", "2021"],
   ["2022", "2022"],
 ];
