@@ -95,20 +95,6 @@ impl Level {
             WHERE 1 = 1",
         );
 
-        query.push(
-            " AND NOT EXISTS (
-                SELECT NULL FROM known_cleared
-                WHERE game = 'smm2' AND id = levels_smm2.id
-            )",
-        );
-
-        query.push(
-            " AND NOT EXISTS (
-                SELECT NULL FROM level_reservations
-                WHERE game = 'smm2' AND level_id = levels_smm2.id
-            )",
-        );
-
         query.push(" AND year = ");
         query.push_bind(params.year);
 
