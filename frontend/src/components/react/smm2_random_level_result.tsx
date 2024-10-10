@@ -1,4 +1,4 @@
-import { getDefaultSmm2LevelFilters, type Smm2LevelFilters } from "./smm2_random_level_filter";
+import { type Smm2LevelFilters } from "./smm2_random_level_filter";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./loading_spinner";
 import Smm2Level from "./smm2_level";
@@ -9,11 +9,7 @@ interface Smm2RandomLevelResultProps {
 }
 
 function removeEmptyFilterValues(raw: Smm2LevelFilters): Smm2LevelFilters {
-  return Object.assign(
-    {},
-    getDefaultSmm2LevelFilters(),
-    Object.fromEntries(Object.entries(raw).filter(([_key, value]) => value != "")),
-  );
+  return Object.assign({}, Object.fromEntries(Object.entries(raw).filter(([_key, value]) => value != "")));
 }
 
 export default function Smm2RandomLevelResult({ render_timestamp, filter }: Smm2RandomLevelResultProps) {

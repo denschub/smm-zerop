@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import FancySelect from "./fancy_select";
 
 export type Smm2LevelFilters = {
-  year: string;
+  year?: string;
   style?: string;
   min_attempts?: string;
   max_attempts?: string;
@@ -25,6 +25,7 @@ interface Smm2RandomLevelFilterOnChange {
 }
 
 const availableYears = [
+  ["", "Any"],
   ["2021", "2021"],
   ["2022", "2022"],
 ];
@@ -73,6 +74,7 @@ export default function Smm2RandomLevelFilter({ onChange }: Smm2RandomLevelFilte
         <FancySelect
           id="year"
           options={availableYears}
+          defaultSelection={selectedFilters.year}
           onChange={(value) => {
             setSelectedFilters((prev) => {
               return {

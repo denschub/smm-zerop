@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 interface FancySelectProps {
   id: string;
   options: string[][];
+  defaultSelection?: string;
   onChange?: FancySelectOnChange;
 }
 
@@ -10,13 +11,15 @@ interface FancySelectOnChange {
   (value: string): void;
 }
 
-export default function FancySelect({ id, options, onChange }: FancySelectProps) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+export default function FancySelect({ id, options, defaultSelection, onChange }: FancySelectProps) {
+  const initialValue = defaultSelection ?? options[0][0];
+  const [selectedIndex, setSelectedIndex] = useState(options.findIndex((opt) => opt[0] == initialValue));
 
   // we need the value to pass back up, and also to update the currently selected value for the select field. So this
   // state is only ever updated by the useEffect hook below that updates whenever the index is run. This isn't the best
   // impl for performance, but this is good enough for this use-case.
-  const [selectedValue, setSelectedValue] = useState(options[0][0]);
+  const [selectedValue, setSelectedValue] = useState(initialValue);
+
   useEffect(() => {
     const newValue = options[selectedIndex][0];
     setSelectedValue(newValue);

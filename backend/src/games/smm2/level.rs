@@ -95,9 +95,7 @@ impl Level {
             WHERE 1 = 1",
         );
 
-        query.push(" AND year = ");
-        query.push_bind(params.year);
-
+        push_optional_filter!(query, params.year, " AND year = ");
         push_optional_filter!(query, params.min_attempts, " AND attempts >= ");
         push_optional_filter!(query, params.max_attempts, " AND attempts <= ");
         push_optional_filter!(query, params.min_footprints, " AND footprints >= ");
@@ -176,7 +174,7 @@ pub enum Tag {
 
 #[derive(Debug, Deserialize)]
 pub struct FilterParams {
-    pub year: i64,
+    pub year: Option<i64>,
     pub min_attempts: Option<i64>,
     pub max_attempts: Option<i64>,
     pub min_footprints: Option<i64>,
