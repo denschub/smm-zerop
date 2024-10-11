@@ -62,6 +62,16 @@ impl From<tiberius::Row> for Level {
             .parse::<i64>()
             .expect("field should be a numeric value");
 
+        let clear_condition = match expect_not_null!(value, "clear_condition", i32) {
+            0 => None,
+            i => Some(i as i64),
+        };
+        let clear_condition_magnitude =
+            match expect_not_null!(value, "clear_condition_magnitude", i32) {
+                0 => None,
+                i => Some(i as i64),
+            };
+
         let style: &str = expect_not_null!(value, "style");
         let theme: &str = expect_not_null!(value, "theme");
         let tags = normalized_tags(value.get("tag1"), value.get("tag2"));
@@ -78,12 +88,11 @@ impl From<tiberius::Row> for Level {
             likes,
             boos,
             comments,
+            clear_condition,
+            clear_condition_magnitude,
             style: style.to_owned(),
             theme: normalize_tag_name(theme),
             tags,
-
-            // [ToDo]: Properly normalze and import if we want to support a CC filter
-            clear_condition: None,
         }
     }
 }

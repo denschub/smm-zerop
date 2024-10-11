@@ -20,7 +20,9 @@ pub struct Level {
     pub boos: i64,
     pub comments: i64,
 
-    pub clear_condition: Option<String>,
+    pub clear_condition: Option<i64>,
+    pub clear_condition_magnitude: Option<i64>,
+
     pub style: String,
     pub theme: String,
     pub tags: Vec<String>,
@@ -45,10 +47,11 @@ impl Level {
                 boos,
                 comments,
                 clear_condition,
+                clear_condition_magnitude,
                 style,
                 theme,
                 tags
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
             ON CONFLICT DO NOTHING",
             self.id,
             self.year,
@@ -62,6 +65,7 @@ impl Level {
             self.boos,
             self.comments,
             self.clear_condition,
+            self.clear_condition_magnitude,
             self.style,
             self.theme,
             &self.tags,
@@ -88,6 +92,7 @@ impl Level {
                 boos,
                 comments,
                 clear_condition,
+                clear_condition_magnitude,
                 style,
                 theme,
                 tags
