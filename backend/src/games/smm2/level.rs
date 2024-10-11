@@ -1,3 +1,5 @@
+use std::vec;
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgQueryResult, FromRow, PgExecutor, Postgres, QueryBuilder};
@@ -111,6 +113,23 @@ impl Level {
         push_optional_filter!(query, &params.theme, " AND theme =  ");
         push_optional_filter!(query, &params.tag, " AND ", " = ANY(tags)");
 
+        if let Some(cc_filter) = &params.clear_condition_group {
+            match cc_filter.id_list() {
+                None => {
+                    query.push(" AND clear_condition IS NULL");
+                }
+                Some(ids) => {
+                    query.push(format!(
+                        " AND clear_condition IN({})",
+                        ids.iter()
+                            .map(|i| i.to_string())
+                            .collect::<Vec<String>>()
+                            .join(",")
+                    ));
+                }
+            }
+        }
+
         query.push(" ORDER BY random() LIMIT 1");
 
         query
@@ -178,6 +197,18 @@ pub enum Tag {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ClearConditionGroup {
+    None,
+    NoJumping,
+    NoDamage,
+    DefeatingEnemies,
+    PowerupFinish,
+    HoldingActivating,
+    Collecting,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct FilterParams {
     pub year: Option<i64>,
     pub min_attempts: Option<i64>,
@@ -186,7 +217,29 @@ pub struct FilterParams {
     pub max_footprints: Option<i64>,
     pub min_clearcheck_ms: Option<i64>,
     pub max_clearcheck_ms: Option<i64>,
+    pub clear_condition_group: Option<ClearConditionGroup>,
     pub style: Option<Style>,
     pub theme: Option<Theme>,
     pub tag: Option<Tag>,
+}
+
+impl ClearConditionGroup {
+    fn id_list(&self) -> Option<Vec<i64>> {
+        match self {
+            Self::None => None,
+            Self::NoJumping => Some(vec![1]),
+            Self::NoDamage => Some(vec![4]),
+            Self::DefeatingEnemies => Some(vec![
+                2, 3, 9, 11, 14, 15, 17, 18, 19, 20, 22, 24, 25, 26, 27, 29, 30, 32, 33, 34, 36,
+                39, 40, 42, 43, 44, 45, 46, 50, 51, 52, 54, 55, 61, 65, 67, 68, 69, 70, 71, 72, 77,
+                78, 79, 80, 81, 83, 85, 87, 92, 93,
+            ]),
+            Self::PowerupFinish => Some(vec![
+                5, 6, 7, 8, 10, 12, 13, 21, 28, 41, 47, 48, 49, 53, 57, 58, 59, 60, 62, 63, 64, 73,
+                74, 75, 76, 84, 89, 90, 91,
+            ]),
+            Self::HoldingActivating => Some(vec![16, 23, 31, 37, 38]),
+            Self::Collecting => Some(vec![35, 56, 66, 82, 86, 88]),
+        }
+    }
 }
