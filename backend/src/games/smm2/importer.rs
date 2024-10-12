@@ -31,6 +31,7 @@ fn normalized_tags(tag1: Option<&str>, tag2: Option<&str>) -> Vec<String> {
 
     tags.iter()
         .filter_map(|o| *o)
+        .filter(|t| *t != "None")
         .map(normalize_tag_name)
         .collect()
 }
