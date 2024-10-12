@@ -39,6 +39,38 @@ const availableStyles = [
   ["sm3dw", "SM3DW"],
 ];
 
+const availableThemes = [
+  ["", "Any"],
+  ["airship", "Airship"],
+  ["castle", "Castle"],
+  ["desert", "Desert"],
+  ["forest", "Forest"],
+  ["ghost_house", "Ghost House"],
+  ["overworld", "Overworld"],
+  ["sky", "Sky"],
+  ["snow", "Snow"],
+  ["underground", "Underground"],
+];
+
+const availableTags = [
+  ["", "Any"],
+  ["art", "Art"],
+  ["auto_mario", "Auto Mario"],
+  ["autoscroll", "Autoscroll"],
+  ["boss_battle", "Boss Battle"],
+  ["link", "Link"],
+  ["multiplayer_versus", "Multiplayer Versus"],
+  ["music", "Music"],
+  ["puzzle_solving", "Puzzle Solving"],
+  ["shooter", "Shooter"],
+  ["short_and_sweet", "Short And Sweet"],
+  ["single_player", "Single Player"],
+  ["speedrun", "Speedrun"],
+  ["standard", "Standard"],
+  ["technical", "Technical"],
+  ["themed", "Themed"],
+];
+
 const attemptOptions = [
   ["", "All"],
   ["50", "50"],
@@ -96,6 +128,38 @@ export default function Smm2RandomLevelFilter({ onChange }: Smm2RandomLevelFilte
               return {
                 ...prev,
                 style: value,
+              };
+            });
+          }}
+        />
+
+        <label htmlFor="theme" className="caption">
+          Level theme
+        </label>
+        <FancySelect
+          id="theme"
+          options={availableThemes}
+          onChange={(value) => {
+            setSelectedFilters((prev) => {
+              return {
+                ...prev,
+                theme: value,
+              };
+            });
+          }}
+        />
+
+        <label htmlFor="tag" className="caption">
+          Tag
+        </label>
+        <FancySelect
+          id="tag"
+          options={availableTags}
+          onChange={(value) => {
+            setSelectedFilters((prev) => {
+              return {
+                ...prev,
+                tag: value,
               };
             });
           }}
