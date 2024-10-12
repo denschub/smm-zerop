@@ -52,6 +52,17 @@ const availableThemes = [
   ["underground", "Underground"],
 ];
 
+const availableCCGroups = [
+  ["none", "None"],
+  ["", "Any"],
+  ["no_jumping", "No jumping/landing"],
+  ["no_damage", "No taking damage"],
+  ["defeating_enemies", "Defeating enemies"],
+  ["powerup_finish", "Finish with power-up"],
+  ["holding_activating", "Hold or activate items"],
+  ["collecting", "Collect items"],
+];
+
 const availableTags = [
   ["", "Any"],
   ["art", "Art"],
@@ -144,6 +155,23 @@ export default function Smm2RandomLevelFilter({ onChange }: Smm2RandomLevelFilte
               return {
                 ...prev,
                 theme: value,
+              };
+            });
+          }}
+        />
+
+        <label htmlFor="clear_condition_group" className="caption">
+          Clear Condition
+        </label>
+        <FancySelect
+          id="clear_condition_group"
+          options={availableCCGroups}
+          defaultSelection=""
+          onChange={(value) => {
+            setSelectedFilters((prev) => {
+              return {
+                ...prev,
+                clear_condition_group: value,
               };
             });
           }}
