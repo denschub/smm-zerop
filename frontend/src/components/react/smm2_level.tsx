@@ -1,4 +1,11 @@
-import { formatClearcheckMs, formatHHMMTime, formatISODate, formatSmm2LevelId, formatTagName } from "src/helpers";
+import {
+  formatClearcheckMs,
+  formatClearCondition,
+  formatHHMMTime,
+  formatISODate,
+  formatSmm2LevelId,
+  formatTagName,
+} from "src/helpers";
 import ThumbnailLoader from "./thumbnail_loader";
 import ClickableCourseId from "./clickable_course_id";
 import { useMutation } from "@tanstack/react-query";
@@ -62,7 +69,7 @@ export default function Smm2Level({ level }: Smm2LevelProps) {
           </div>
         </div>
         <div className="metadata-container">
-          <ul className="counters">
+          <ul className="inline">
             <li>
               <i className="fa-solid fa-heart" title="Likes"></i> {level.likes}
             </li>
@@ -76,15 +83,26 @@ export default function Smm2Level({ level }: Smm2LevelProps) {
               <i className="fa-solid fa-comments" title="Comments"></i> {level.comments}
             </li>
           </ul>
-          <p>
-            <i className="fa-solid fa-gamepad" title="Game style"></i> {level.style}
-          </p>
+          <ul className="inline">
+            <li>
+              <i className="fa-solid fa-gamepad" title="Game style"></i> {level.style}
+            </li>
+            <li>
+              <i className="fa-solid fa-palette" title="Level Theme"></i> {formatTagName(level.theme)}
+            </li>
+          </ul>
           <p>
             <i className="fa-solid fa-stopwatch" title="Clear check time"></i> {formatClearcheckMs(level.clearcheck_ms)}
           </p>
           {level.tags.length > 0 && (
             <p>
               <i className="fa-solid fa-tag" title="Tags"></i> {level.tags.map(formatTagName).join(", ")}
+            </p>
+          )}
+          {level.clear_condition && (
+            <p>
+              <i className="fa-solid fa-flag-checkered" title="Clear Condition"></i>{" "}
+              {formatClearCondition(level.clear_condition, level.clear_condition_magnitude)}
             </p>
           )}
         </div>
