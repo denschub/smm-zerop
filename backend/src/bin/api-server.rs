@@ -133,7 +133,12 @@ async fn post_smm2_mark_cleared(
         return (StatusCode::NOT_FOUND, "invalid level id").into_response();
     }
 
-    match discord::post_clear(&app_state.config.discord_bot_webhook, &payload.level_id).await {
+    match discord::post_clear(
+        &app_state.config.discord_bot_webhook,
+        &smm2::level::Level::formatted_level_id(&payload.level_id),
+    )
+    .await
+    {
         Ok(_) => StatusCode::NO_CONTENT.into_response(),
         Err(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg.to_string()).into_response(),
     }

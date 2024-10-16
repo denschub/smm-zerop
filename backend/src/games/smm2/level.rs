@@ -147,6 +147,17 @@ impl Level {
             .await
             .is_ok_and(|r| r.is_some())
     }
+
+    pub fn formatted_level_id(raw_id: &str) -> String {
+        raw_id
+            .to_uppercase()
+            .chars()
+            .collect::<Vec<char>>()
+            .chunks(3)
+            .map(|c| c.iter().collect::<String>())
+            .collect::<Vec<String>>()
+            .join("-")
+    }
 }
 
 #[derive(Debug, Deserialize, sqlx::Type)]
@@ -241,5 +252,15 @@ impl ClearConditionGroup {
             Self::HoldingActivating => Some(vec![16, 23, 31, 37, 38]),
             Self::Collecting => Some(vec![35, 56, 66, 82, 86, 88]),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn formatted_level_id_formats_correctly() {
+        assert_eq!(Level::formatted_level_id("abc123DEF"), "ABC-123-DEF")
     }
 }
