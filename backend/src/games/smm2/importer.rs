@@ -63,9 +63,10 @@ impl From<tiberius::Row> for Level {
             .parse::<i64>()
             .expect("field should be a numeric value");
 
-        let clear_condition = match expect_not_null!(value, "clear_condition", i32) {
-            0 => None,
-            i => Some(i as i64),
+        let clear_condition = match value.get::<i32, &str>("clear_condition") {
+            None => None,
+            Some(0) => None,
+            Some(i) => Some(i as i64),
         };
         let clear_condition_magnitude =
             match expect_not_null!(value, "clear_condition_magnitude", i32) {
