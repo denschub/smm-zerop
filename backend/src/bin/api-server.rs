@@ -16,8 +16,7 @@ use tokio::{net::TcpListener, signal};
 use tower_http::cors::{self, CorsLayer};
 use tracing::error;
 
-#[tokio::main]
-async fn main() -> anyhow::Result<()> {
+fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
 
     let args: Vec<String> = std::env::args().collect();
@@ -29,10 +28,28 @@ async fn main() -> anyhow::Result<()> {
         std::fs::read_to_string(&args[1]).context("Failed to load config file")?;
     let app_config: AppConfig =
         toml::from_str(&config_file_contents).context("Failed to parse config file")?;
+
+    let mut rt = tokio::runtime::Builder::new_multi_thread();
+    if let Some(threads) = app_config.api_server.threads {
+        rt.worker_threads(threads);
+    }
+
+    rt.enable_all()
+        .build()?
+        .block_on(async { run(app_config).await })
+}
+
+async fn run(app_config: AppConfig) -> anyhow::Result<()> {
     let app_config_arc = Arc::new(app_config);
 
     let db_pool = PgPoolOptions::new()
-        .max_connections(app_config_arc.database.max_connections)
+        .max_connections(
+            tokio::runtime::Handle::current()
+                .metrics()
+                .num_workers()
+                .try_into()
+                .expect("num_workers to be less than 2^32"),
+        )
         .connect_with(app_config_arc.database.connstring.clone())
         .await
         .context("Failed to connect to database")?;

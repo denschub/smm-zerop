@@ -1,9 +1,9 @@
 [api_server]
 listen = "[::]:8081"
+threads = 2
 
 [database]
 connstring = "postgres://postgres@127.0.0.1/smm-zerop"
-max_connections = 1
 
 [discord_bot_webhook]
 id = "0000000000000000000"

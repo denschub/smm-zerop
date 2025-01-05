@@ -15,6 +15,7 @@ pub struct AppConfig {
 #[derive(Debug, Deserialize)]
 pub struct ApiServerConfig {
     pub listen: SocketAddr,
+    pub threads: Option<usize>,
 }
 
 #[serde_as]
@@ -22,7 +23,6 @@ pub struct ApiServerConfig {
 pub struct DatabaseConfig {
     #[serde_as(as = "DisplayFromStr")]
     pub connstring: PgConnectOptions,
-    pub max_connections: u32,
 }
 
 #[serde_as]

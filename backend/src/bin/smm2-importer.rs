@@ -5,8 +5,7 @@ use tokio::net::TcpStream;
 use tokio_util::compat::TokioAsyncWriteCompatExt;
 use tracing::info;
 
-#[tokio::main]
-async fn main() -> anyhow::Result<()> {
+fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
 
     let args: Vec<String> = std::env::args().collect();
@@ -19,6 +18,17 @@ async fn main() -> anyhow::Result<()> {
     let app_config: AppConfig =
         toml::from_str(&config_file_contents).context("Failed to parse config file")?;
 
+    let mut rt = tokio::runtime::Builder::new_multi_thread();
+    if let Some(threads) = app_config.api_server.threads {
+        rt.worker_threads(threads);
+    }
+
+    rt.enable_all()
+        .build()?
+        .block_on(async { run(app_config).await })
+}
+
+async fn run(app_config: AppConfig) -> anyhow::Result<()> {
     info!("connecting to upstream database...");
     let upstream_db_config =
         tiberius::Config::from_ado_string(&app_config.smm2_upstream_db.connection_string)?;
@@ -29,7 +39,13 @@ async fn main() -> anyhow::Result<()> {
 
     info!("connecting to own database...");
     let db_pool = PgPoolOptions::new()
-        .max_connections(app_config.database.max_connections)
+        .max_connections(
+            tokio::runtime::Handle::current()
+                .metrics()
+                .num_workers()
+                .try_into()
+                .expect("num_workers to be less than 2^32"),
+        )
         .connect_with(app_config.database.connstring.clone())
         .await
         .context("Failed to connect to database")?;
