@@ -21,9 +21,13 @@ jobs:
       - name: build and deploy
         working-directory: frontend/
         run: |
-          npm i && npm i -g wrangler
+          echo "Building..."
+          npm i
           npm run build
-          npx wrangler pages deploy dist --project-name=${{ vars.CLOUDFLARE_PROJECT_NAME }} --branch=main
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+          echo "Getting SSH key..."
+          curl -so /tmp/ssh-key -H  "Authorization: Bearer ${{ secrets.SECRET_TOKEN }}" "${{ vars.SECRET_URL }}"
+          chmod 600 /tmp/ssh-key
+
+          echo "Syncing files..."
+          rsync -rz --delete -e "${{ vars.RSYNC_CONNECT_PROG }}" ./dist/ "${{ vars.RSYNC_TARGET }}"
