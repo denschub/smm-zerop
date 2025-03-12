@@ -12,7 +12,7 @@ export type Smm2LevelFilters = {
 
 export function getDefaultSmm2LevelFilters(): Smm2LevelFilters {
   return {
-    year: "2021",
+    year: "2022",
   };
 }
 
