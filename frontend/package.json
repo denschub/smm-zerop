@@ -11,7 +11,7 @@
     "start": "astro dev"
   },
   "dependencies": {
-    "@astrojs/react": "4.2.2",
+    "@astrojs/react": "4.2.5",
     "@fontsource-variable/inter": "5.2.5",
     "@tanstack/react-query": "5.70.0",
     "astro": "5.5.5",
