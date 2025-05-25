@@ -134,6 +134,7 @@ async fn get_smm2_random_level(
 #[derive(Debug, Deserialize)]
 struct PostSmm2MarkClearedPayload {
     level_id: String,
+    source: Option<String>,
 }
 
 #[debug_handler]
@@ -155,6 +156,7 @@ async fn post_smm2_mark_cleared(
     match discord::post_clear(
         &app_state.config.discord_bot_webhook,
         &smm2::level::Level::formatted_level_id(&normalized_id),
+        payload.source.as_deref(),
     )
     .await
     {

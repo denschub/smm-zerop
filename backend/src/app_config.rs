@@ -1,4 +1,4 @@
-use std::net::SocketAddr;
+use std::{collections::HashMap, net::SocketAddr};
 
 use serde::Deserialize;
 use serde_with::{serde_as, DisplayFromStr};
@@ -30,6 +30,7 @@ pub struct DatabaseConfig {
 pub struct DiscordBotWebhookConfig {
     pub id: String,
     pub token: String,
+    pub special_sources: HashMap<String, String>,
 }
 
 #[derive(Debug, Deserialize)]

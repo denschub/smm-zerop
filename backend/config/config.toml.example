@@ -9,5 +9,8 @@ connstring = "postgres://postgres@127.0.0.1/smm-zerop"
 id = "0000000000000000000"
 token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
+[discord_bot_webhook.special_sources]
+knflrpn = "https://knflrpn.com/mm2/"
+
 [smm2_upstream_db]
 connection_string = "Server=tcp:127.0.0.1,1433; Database=SMM2; User=username; Password=password"
