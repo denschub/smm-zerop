@@ -24,7 +24,7 @@ pub async fn post_clear(config: &DiscordBotWebhookConfig, level_id: &str) -> any
 
     if !discord_response.status().is_success() {
         error!("got status `{}`", discord_response.status());
-        bail!("unexpected status");
+        bail!("discord webhook failed: unexpected response status");
     }
 
     Ok(())
