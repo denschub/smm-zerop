@@ -142,17 +142,19 @@ async fn post_smm2_mark_cleared(
     State(app_state): State<Arc<AppState>>,
     extract::Json(payload): extract::Json<PostSmm2MarkClearedPayload>,
 ) -> Response {
-    if payload.level_id.len() != 9 {
+    let normalized_id = smm2::level::Level::normalized_internal_level_id(&payload.level_id);
+
+    if normalized_id.len() != 9 {
         return (StatusCode::BAD_REQUEST, "invalid level id").into_response();
     }
 
-    if !smm2::level::Level::id_exists(&app_state.database, &payload.level_id).await {
+    if !smm2::level::Level::id_exists(&app_state.database, &normalized_id).await {
         return (StatusCode::NOT_FOUND, "invalid level id").into_response();
     }
 
     match discord::post_clear(
         &app_state.config.discord_bot_webhook,
-        &smm2::level::Level::formatted_level_id(&payload.level_id),
+        &smm2::level::Level::formatted_level_id(&normalized_id),
     )
     .await
     {

@@ -148,6 +148,10 @@ impl Level {
             .is_ok_and(|r| r.is_some())
     }
 
+    pub fn normalized_internal_level_id(raw_id: &str) -> String {
+        raw_id.trim().replace('-', "").to_lowercase()
+    }
+
     pub fn formatted_level_id(raw_id: &str) -> String {
         raw_id
             .to_uppercase()
