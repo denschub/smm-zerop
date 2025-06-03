@@ -5,7 +5,7 @@ use axum::{
     debug_handler,
     extract::{self, Query, State},
     http::StatusCode,
-    response::{IntoResponse, Response},
+    response::{IntoResponse, Redirect, Response},
     routing::{get, post},
     Json, Router,
 };
@@ -91,6 +91,7 @@ async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
         .allow_origin(cors::Any);
 
     let app = Router::new()
+        .route("/", get(get_index))
         .route("/__heartbeat__", get(get_heartbeat))
         .route("/smm2/random_level", get(get_smm2_random_level))
         .route("/smm2/mark_cleared", post(post_smm2_mark_cleared))
@@ -103,6 +104,11 @@ async fn run_http_server(app_state: Arc<AppState>) -> anyhow::Result<()> {
         .await?;
 
     Ok(())
+}
+
+#[tracing::instrument()]
+async fn get_index() -> impl IntoResponse {
+    Redirect::temporary("https://smm-uncleared.com")
 }
 
 #[tracing::instrument()]
