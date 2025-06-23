@@ -14,7 +14,7 @@
     "@astrojs/react": "4.3.0",
     "@fontsource-variable/inter": "5.2.5",
     "@tanstack/react-query": "5.80.2",
-    "astro": "5.8.1",
+    "astro": "5.10.1",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
