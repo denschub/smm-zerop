@@ -11,7 +11,7 @@ fn lookup_message_data(
 ) -> (&'static str, String) {
     if let Some(source) = source {
         if let Some(appendix) = config.special_sources.get(source) {
-            return ("api.smm-uncleared.com", format!(" ({})", appendix));
+            return ("api.smm-uncleared.com", format!(" ({appendix})"));
         }
     }
 
@@ -29,7 +29,7 @@ pub async fn post_clear(
     let mut body = HashMap::new();
     body.insert("username", username);
 
-    let message = format!("!clear {}{}", level_id, appendix);
+    let message = format!("!clear {level_id}{appendix}");
     body.insert("content", &message);
 
     let discord_response = reqwest::Client::new()
