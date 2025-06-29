@@ -9,7 +9,7 @@ interface Smm2RandomLevelResultProps {
 }
 
 function removeEmptyFilterValues(raw: Smm2LevelFilters): Smm2LevelFilters {
-  return Object.assign({}, Object.fromEntries(Object.entries(raw).filter(([_key, value]) => value != "")));
+  return Object.assign({}, Object.fromEntries(Object.entries(raw).filter(([_key, value]) => value && value != "")));
 }
 
 export default function Smm2RandomLevelResult({ render_timestamp, filter }: Smm2RandomLevelResultProps) {
@@ -18,7 +18,7 @@ export default function Smm2RandomLevelResult({ render_timestamp, filter }: Smm2
   const { isLoading, error, data } = useQuery({
     queryKey: ["/smm2/random_level", cleanedFilters, render_timestamp],
     queryFn: async () => {
-      const filterParams = new URLSearchParams(cleanedFilters);
+      const filterParams = new URLSearchParams(Object.entries(cleanedFilters));
       const res = await fetch(
         [`${import.meta.env.PUBLIC_SMM_ZEROP_API_ROOT}/smm2/random_level`, filterParams.toString()].join("?"),
       );
