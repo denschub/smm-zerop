@@ -14,11 +14,15 @@ type Smm2LevelFilterKey =
 
 export type Smm2LevelFilters = Partial<Record<Smm2LevelFilterKey, string>>;
 
-export function getDefaultSmm2LevelFilters(): Smm2LevelFilters {
-  const defaults: Smm2LevelFilters = {
+function getDefaultSmm2LevelFilters(): Smm2LevelFilters {
+  return {
     year: "2022",
     clear_condition_group: "",
   };
+}
+
+export function getInititalSmm2LevelFilters(): Smm2LevelFilters {
+  const defaults = getDefaultSmm2LevelFilters();
 
   let filterState: Smm2LevelFilters = {};
   for (const filterKey of Object.keys(availableSmm2Filters) as Smm2LevelFilterKey[]) {
@@ -138,7 +142,7 @@ const availableSmm2Filters: Record<Smm2LevelFilterKey, string[][]> = {
 };
 
 export default function Smm2RandomLevelFilter({ onChange }: Smm2RandomLevelFilterProps) {
-  const [selectedFilters, setSelectedFilters] = useState(getDefaultSmm2LevelFilters());
+  const [selectedFilters, setSelectedFilters] = useState(getInititalSmm2LevelFilters());
 
   useEffect(() => {
     onChange && onChange(selectedFilters);
@@ -302,6 +306,20 @@ export default function Smm2RandomLevelFilter({ onChange }: Smm2RandomLevelFilte
             });
           }}
         />
+      </div>
+
+      <div className="level-actions" style={{ marginTop: "2rem" }}>
+        <button
+          className="button"
+          onClick={() => {
+            setSelectedFilters(() => {
+              return getDefaultSmm2LevelFilters();
+            });
+            window.location.reload();
+          }}
+        >
+          <i className="fa-solid fa-trash"></i> Reset Filters
+        </button>
       </div>
     </section>
   );

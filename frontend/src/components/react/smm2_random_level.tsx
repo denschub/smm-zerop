@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Smm2RandomLevelFilter, { getDefaultSmm2LevelFilters } from "./smm2_random_level_filter";
+import Smm2RandomLevelFilter, { getInititalSmm2LevelFilters } from "./smm2_random_level_filter";
 import Smm2RandomLevelResult from "./smm2_random_level_result";
 import DefaultQueryProvider from "./default_query_provider";
 
 export default function Smm2RandomLevel() {
   const [renderTimestamp, setRenderTimestamp] = useState<number>(Date.now());
-  const [activeFilters, setActiveFilters] = useState(getDefaultSmm2LevelFilters());
-  const [stagingFilters, setStagingFilters] = useState(getDefaultSmm2LevelFilters());
+  const [activeFilters, setActiveFilters] = useState(getInititalSmm2LevelFilters());
+  const [stagingFilters, setStagingFilters] = useState(getInititalSmm2LevelFilters());
 
   return (
     <DefaultQueryProvider>

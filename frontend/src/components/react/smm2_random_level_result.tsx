@@ -47,7 +47,7 @@ export default function Smm2RandomLevelResult({ render_timestamp, filter }: Smm2
           <h2>Oh no!</h2>
           {(error as any).responseCode == 404 ? (
             <p>
-              <strong>No level found</strong>! Be sure to double-check your filters.
+              <strong>No level found</strong>! Be sure to double-check your filters, they might be too limiting.
             </p>
           ) : (
             <p>
