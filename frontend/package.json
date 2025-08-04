@@ -15,12 +15,12 @@
     "@fontsource-variable/inter": "5.2.6",
     "@tanstack/react-query": "5.81.5",
     "astro": "5.10.1",
-    "react": "19.1.0",
+    "react": "19.1.1",
     "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.4",
-    "@types/react": "19.1.8",
+    "@types/react": "19.1.9",
     "@types/react-dom": "19.1.6",
     "prettier": "3.6.2",
     "prettier-plugin-astro": "0.14.1",
