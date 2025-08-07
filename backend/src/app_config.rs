@@ -1,7 +1,7 @@
 use std::{collections::HashMap, net::SocketAddr};
 
 use serde::Deserialize;
-use serde_with::{serde_as, DisplayFromStr};
+use serde_with::{DisplayFromStr, serde_as};
 use sqlx::postgres::PgConnectOptions;
 
 #[derive(Debug, Deserialize)]

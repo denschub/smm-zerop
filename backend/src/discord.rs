@@ -9,11 +9,10 @@ fn lookup_message_data(
     config: &DiscordBotWebhookConfig,
     source: Option<&str>,
 ) -> (&'static str, String) {
-    if let Some(source) = source {
-        if let Some(appendix) = config.special_sources.get(source) {
+    if let Some(source) = source
+        && let Some(appendix) = config.special_sources.get(source) {
             return ("api.smm-uncleared.com", format!(" ({appendix})"));
         }
-    }
 
     ("smm-uncleared.com", String::new())
 }

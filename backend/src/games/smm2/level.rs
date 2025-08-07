@@ -2,7 +2,7 @@ use std::vec;
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgQueryResult, FromRow, PgExecutor, Postgres, QueryBuilder};
+use sqlx::{FromRow, PgExecutor, Postgres, QueryBuilder, postgres::PgQueryResult};
 
 use crate::push_optional_filter;
 

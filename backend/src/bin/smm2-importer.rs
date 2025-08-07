@@ -1,4 +1,4 @@
-use anyhow::{bail, Context};
+use anyhow::{Context, bail};
 use smm_zerop_backend::{app_config::AppConfig, games::smm2::importer};
 use sqlx::postgres::PgPoolOptions;
 use tokio::net::TcpStream;
