@@ -16,7 +16,7 @@ export type Smm2LevelFilters = Partial<Record<Smm2LevelFilterKey, string>>;
 
 function getDefaultSmm2LevelFilters(): Smm2LevelFilters {
   return {
-    year: "2022",
+    year: "2023",
     clear_condition_group: "",
   };
 }
