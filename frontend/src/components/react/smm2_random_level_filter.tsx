@@ -60,6 +60,7 @@ const availableSmm2Filters: Record<Smm2LevelFilterKey, string[][]> = {
     ["", "Any"],
     ["2022", "2022"],
     ["2023", "2023"],
+    ["2024", "2024"],
   ],
   style: [
     ["", "Any"],
