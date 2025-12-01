@@ -68,11 +68,11 @@ impl From<tiberius::Row> for Level {
             Some(0) => None,
             Some(i) => Some(i as i64),
         };
-        let clear_condition_magnitude =
-            match expect_not_null!(value, "clear_condition_magnitude", i32) {
-                0 => None,
-                i => Some(i as i64),
-            };
+        let clear_condition_magnitude = match value.get::<i32, &str>("clear_condition_magnitude") {
+            None => None,
+            Some(0) => None,
+            Some(i) => Some(i as i64),
+        };
 
         let style: &str = expect_not_null!(value, "style");
         let theme: &str = expect_not_null!(value, "theme");
