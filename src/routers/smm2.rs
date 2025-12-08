@@ -9,6 +9,7 @@ use axum::{
 use minijinja::context;
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
+use tower_http::cors::{self, CorsLayer};
 
 use crate::{
     components::{app_state::AppState, discord_webhook},
@@ -20,11 +21,19 @@ use crate::{
 /// subdirectory, so this needs to be redirected (or proxied) in prod for
 /// compatibility.
 pub fn build() -> Router<AppState> {
+    let cors_layer = CorsLayer::new()
+        .allow_headers(cors::Any)
+        .allow_methods(cors::Any)
+        .allow_origin(cors::Any);
+    let api_router = Router::new()
+        .route("/api/smm2/random_level", get(api_random_level))
+        .route("/api/smm2/mark_cleared", post(api_mark_cleared))
+        .layer(cors_layer);
+
     Router::new()
         .route("/smm2/random_level/", get(random_level))
-        .route("/api/smm2/random_level", get(api_random_level))
         .route("/smm2/mark_cleared/", post(mark_cleared))
-        .route("/api/smm2/mark_cleared", post(api_mark_cleared))
+        .merge(api_router)
 }
 
 #[derive(Debug, Deserialize, Serialize)]
