@@ -3,6 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% if self.page_title() | trim %}
+      <title>{% block page_title %}{% endblock %} - Team 0%</title>
+    {% else %}
+      <title>Team 0%</title>
+    {% endif %}
+
     <link rel="shortcut icon" href="/favicon.png" />
     {% for css in vite_css("main.js") %}
       <link rel="stylesheet" href="{{ css }}" />
@@ -12,13 +18,15 @@
     {% endif %}
     <script type="module" src="{{ vite_asset('main.js') }}"></script>
 
-    <link rel="stylesheet" href="https://internal-cdn.0b101010.services/fontawesome/smm-uncleared/css/all.min.css" />
-
-    {% if self.page_title() | trim %}
-      <title>{% block page_title %}{% endblock %} - Team 0%</title>
-    {% else %}
-      <title>Team 0%</title>
-    {% endif %}
+    <link
+      rel="preload"
+      href="https://internal-cdn.0b101010.services/fontawesome/smm-uncleared/css/all.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://internal-cdn.0b101010.services/fontawesome/smm-uncleared/css/all.min.css" />
+    </noscript>
   </head>
   <body class="{{ body_classes }}">
     <main>
