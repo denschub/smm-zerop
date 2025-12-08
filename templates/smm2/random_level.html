@@ -1,0 +1,280 @@
+{% extends "layout.html" %}
+{% block page_title %}Random Uncleared Level - SMM2{% endblock %}
+{% set headline = "Random Uncleared Level - SMM2" %}
+{% macro fancyselect(id, label, values, current) %}
+  <label for="{{ id }}" class="caption">{{ label }}</label>
+  <div class="fancy-select">
+    <noscript><div class="button-placeholder"></div></noscript>
+    <button type="button" aria-hidden="true"><i class="fa-solid fa-triangle fa-rotate-270"></i></button>
+    <select name="{{ id }}" id="{{ id }}">
+      {%- set selected = current if current else "" -%}
+      {% for value in values %}
+        <option value="{{ value[0] }}" {% if value[0] == selected %}selected{% endif %}>{{ value[1] }}</option>
+      {% endfor %}
+    </select>
+    <noscript><div class="button-placeholder"></div></noscript>
+    <button type="button" aria-hidden="true"><i class="fa-solid fa-triangle fa-rotate-90"></i></button>
+  </div>
+{% endmacro %}
+{% block body %}
+  {% if extra_params.mark_clear_success %}
+    <section class="box">
+      <h2>Success!</h2>
+      <p>
+        Your clear will be processed in the background. If the level is cleared, it will soon be removed from the
+        randomizer.
+      </p>
+    </section>
+  {% endif %}
+  {% if level %}
+    <section class="box level-box">
+      <h2 class="level-text">{{ level.title }}</h2>
+      <div class="thumbnail-and-metadata">
+        <div class="thumbnail-container">
+          <div class="thumbnail-container-inner">
+            <div class="thumbnail-loader jsonly">
+              <div class="image-container">
+                <img
+                  alt="Level Thumbnail"
+                  data-src="https://tgrcode.com/mm2/level_thumbnail/{{ level.id }}"
+                  style="visibility: hidden;"
+                  loading="lazy"
+                />
+              </div>
+              <div class="image-spinner-container">
+                <div class="image-spinner">
+                  <i class="spinner-loading fa-duotone fa-fw fa-spinner-third fa-spin"></i>
+                  <i class="spinner-error fa-solid fa-fw fa-cloud-question" style="display: none"></i>
+                </div>
+              </div>
+            </div>
+            <noscript>
+              <img alt="Level Thumbnail" src="https://tgrcode.com/mm2/level_thumbnail/{{ level.id }}" />
+            </noscript>
+            <p>
+              <span>{{ level.uploaded_at | datetimeformat(format="[year]-[month]-[day]") }}</span>
+              <span>{{ level.uploaded_at | datetimeformat(format="[hour]:[minute]") }}</span>
+            </p>
+          </div>
+        </div>
+        <div class="metadata-container">
+          <ul class="inline">
+            <li><i class="fa-solid fa-heart" title="Likes"></i> {{ level.likes }}</li>
+            <li><i class="fa-solid fa-heart-crack" title="Boos"></i> {{ level.boos }}</li>
+            <li><i class="fa-solid fa-shoe-prints fa-rotate-270" title="Footprints"></i> {{ level.footprints }}</li>
+            <li><i class="fa-solid fa-comments" title="Comments"></i> {{ level.comments }}</li>
+          </ul>
+          <ul class="inline">
+            <li><i class="fa-solid fa-gamepad" title="Game style"></i> {{ level.style }}</li>
+            <li><i class="fa-solid fa-palette" title="Level Theme"></i> {{ level.theme | tag_name }}</li>
+          </ul>
+          <p>
+            <i class="fa-solid fa-stopwatch" title="Clear check time"></i> {{ level.clearcheck_ms | ms_to_minsecs }}
+          </p>
+          {% if level.tags %}
+            <p><i class="fa-solid fa-tag" title="Tags"></i> {{ level.tags | tag_list }}</p>
+          {% endif %}
+          {% if level.clear_condition %}
+            <p>
+              <i class="fa-solid fa-flag-checkered" title="Clear Condition"></i>
+              {{ clear_condition_text(level.clear_condition, level.clear_condition_magnitude) }}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="level-info">
+        <div class="text-box level-text">
+          <p>{{ level.description if level.description else "(no description)" }}</p>
+        </div>
+        <div class="two-col">
+          <div class="text-box">
+            <p class="header">Attempts</p>
+            <p class="content-large">{{ level.attempts }}</p>
+          </div>
+
+          <div class="text-box clickcopy-container">
+            <div class="popover" style="display: none">
+              <p>Copied to clipboard!</p>
+            </div>
+            <p class="header">Course ID</p>
+            <p class="content-large clickcopy-content">{{ level.id | formatted_level_id }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="level-actions">
+        <a class="button" href="https://smm2.wizul.us/smm2/level/{{ level.id | formatted_level_id }}" target="_blank">
+          <i class="fa-solid fa-eye"></i> Open in Viewer
+        </a>
+        <form action="/smm2/mark_cleared/" method="post">
+          <input type="hidden" name="level_id" value="{{ level.id }}" />
+          <input type="hidden" name="current_filter_query" value="{{ current_filter_query }}" />
+          <button class="button"><i class="fa-solid fa-flag-pennant"></i> Mark as Cleared</button>
+        </form>
+      </div>
+    </section>
+  {% else %}
+    <section class="box">
+      <h2>Oh no!</h2>
+      <p><strong>No level found</strong>! Be sure to double-check your filters, they might be too limiting.</p>
+    </section>
+  {% endif %}
+  <form action="/smm2/random_level/" method="get">
+    <button class="button section-button"><i class="fa-solid fa-rotate-right"></i> Load New Level</button>
+    <section class="box">
+      <h2>Filters</h2>
+      <div class="fancyselect-list">
+        {{
+          fancyselect(
+            id="year",
+            label="Year",
+            values=[
+              [-1, "Any"],
+              [2022, "2022"],
+              [2023, "2023"],
+              [2024, "2024"],
+            ],
+            current=effective_filters.year
+          )
+        }}
+        {{
+          fancyselect(
+            id="style",
+            label="Game style",
+            values=[
+              ["", "Any"],
+              ["smb1", "SMB1"],
+              ["smb3", "SMB3"],
+              ["smw", "SMW"],
+              ["nsmbu", "NSMBU"],
+              ["sm3dw", "SM3DW"],
+            ],
+            current=effective_filters.style
+          )
+        }}
+        {{
+          fancyselect(
+            id="theme",
+            label="Level theme",
+            values=[
+              ["", "Any"],
+              ["airship", "Airship"],
+              ["castle", "Castle"],
+              ["desert", "Desert"],
+              ["forest", "Forest"],
+              ["ghost_house", "Ghost House"],
+              ["overworld", "Overworld"],
+              ["sky", "Sky"],
+              ["snow", "Snow"],
+              ["underground", "Underground"],
+            ],
+            current=effective_filters.theme
+          )
+        }}
+        {{
+          fancyselect(
+            id="clear_condition_group",
+            label="Clear condition",
+            values=[
+              ["none", "None"],
+              ["", "Any"],
+              ["no_jumping", "No jumping/landing"],
+              ["no_damage", "No taking damage"],
+              ["defeating_enemies", "Defeating enemies"],
+              ["powerup_finish", "Finish with power-up"],
+              ["holding_activating", "Hold or activate items"],
+              ["collecting", "Collect items"],
+            ],
+            current=effective_filters.clear_condition_group
+          )
+        }}
+        {{
+          fancyselect(
+            id="tag",
+            label="Tag",
+            values=[
+              ["", "Any"],
+              ["art", "Art"],
+              ["auto_mario", "Auto Mario"],
+              ["autoscroll", "Autoscroll"],
+              ["boss_battle", "Boss Battle"],
+              ["link", "Link"],
+              ["multiplayer_versus", "Multiplayer Versus"],
+              ["music", "Music"],
+              ["puzzle_solving", "Puzzle Solving"],
+              ["shooter", "Shooter"],
+              ["short_and_sweet", "Short And Sweet"],
+              ["single_player", "Single Player"],
+              ["speedrun", "Speedrun"],
+              ["standard", "Standard"],
+              ["technical", "Technical"],
+              ["themed", "Themed"],
+            ],
+            current=effective_filters.tag
+          )
+        }}
+        {{
+          fancyselect(
+            id="min_attempts",
+            label="Min. attempts",
+            values=[
+              ["", "All"],
+              [50, "50"],
+              [100, "100"],
+              [200, "200"],
+              [500, "500"],
+              [1000, "1000"],
+            ],
+            current=effective_filters.min_attempts
+          )
+        }}
+        {{
+          fancyselect(
+            id="max_attempts",
+            label="Max. attempts",
+            values=[
+              ["", "All"],
+              [50, "50"],
+              [100, "100"],
+              [200, "200"],
+              [500, "500"],
+              [1000, "1000"],
+            ],
+            current=effective_filters.max_attempts
+          )
+        }}
+        {{
+          fancyselect(
+            id="min_clearcheck_ms",
+            label="Min. clear check time",
+            values=[
+              ["", "All"],
+              [30000, "30 seconds"],
+              [60000, "60 seconds"],
+              [120000, "2 minutes"],
+              [240000, "4 minutes"],
+            ],
+            current=effective_filters.min_clearcheck_ms
+          )
+        }}
+        {{
+          fancyselect(
+            id="max_clearcheck_ms",
+            label="Max. clear check time",
+            values=[
+              ["", "All"],
+              [30000, "30 seconds"],
+              [60000, "60 seconds"],
+              [120000, "2 minutes"],
+              [240000, "4 minutes"],
+            ],
+            current=effective_filters.max_clearcheck_ms
+          )
+        }}
+      </div>
+
+      <div class="level-actions" style="margin-top: 2rem">
+        <a class="button" href="/smm2/random_level/"><i class="fa-solid fa-trash"></i> Reset Filters</a>
+      </div>
+    </section>
+  </form>
+{% endblock %}

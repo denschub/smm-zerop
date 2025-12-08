@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/favicon.png" />
+    {% for css in vite_css("main.js") %}
+      <link rel="stylesheet" href="{{ css }}" />
+    {% endfor %}
+    {% if vite_client() %}
+      <script type="module" src="{{ vite_client() }}"></script>
+    {% endif %}
+    <script type="module" src="{{ vite_asset('main.js') }}"></script>
+
+    <link rel="stylesheet" href="https://internal-cdn.0b101010.services/fontawesome/smm-uncleared/css/all.min.css" />
+
+    {% if self.page_title() | trim %}
+      <title>{% block page_title %}{% endblock %} - Team 0%</title>
+    {% else %}
+      <title>Team 0%</title>
+    {% endif %}
+  </head>
+  <body class="{{ body_classes }}">
+    <main>
+      <header>
+        {% if not hide_home_button %}
+          <a href="/" class="icon-button" title="Go home">
+            <i class="fa-solid fa-house"></i>
+          </a>
+        {% endif %}
+        <h1>{{ headline }}</h1>
+      </header>
+      {% block body %}{% endblock %}
+      <footer>
+        <p>
+          <a href="/about/">What? Who? How? and other FAQ</a> &middot;
+          <a href="/changelog/">Changelog</a>
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,9 +1,0 @@
-.astro/
-.env*.local
-dist/
-node_modules/
-
-# Per my own conventions, there are only exact version pins in package.json, so
-# the need for a checked-in package-lock.json is reduced. This isn't an
-# universally good idea, but it works for projects like this.
-package-lock.json

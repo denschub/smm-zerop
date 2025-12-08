@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+cd ../public/assets/
+for file in $(find . -type f -not -name "*.br" -not -name "*.zst"); do
+  echo "Compressing $file..."
+  brotli -k -f -9 $file
+  zstd -q -k -f -19 $file
+done

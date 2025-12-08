@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block page_title %}static{% endblock %}
+{% block body %}
+  <h1>hello world</h1>
+  {% if user %}
+    <p>you are signed in, {{ user }}!</p>
+  {% endif %}
+  <p>this is a static page rendered with a template. wohoo. party.</p>
+
+  <h2>create new Example!</h2>
+  <form method="post" action="/example/create/{% if user %}auth{% else %}anon{% endif %}">
+    <textarea name="content" id="content"></textarea><br />
+    <input type="submit" />
+  </form>
+{% endblock %}

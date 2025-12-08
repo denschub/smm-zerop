@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block page_title %}{{ status_code }}{% endblock %}
+{% set headline = "Whoops." %}
+{% block body %}
+  <section class="box">
+    <h2>error {{ status_code }}</h2>
+    <p>{{ message }} :(</p>
+  </section>
+{% endblock %}

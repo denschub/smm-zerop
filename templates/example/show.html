@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block page_title %}{{ item.content }}{% endblock %}
+{% block body %}
+  <h1>found item</h1>
+  {% if user %}
+    <p>you are signed in, {{ user }}!</p>
+  {% endif %}
+  <p>
+    <strong>{{ item.content }}</strong><br />
+    uuid: {{ item.uuid }}<br />
+    created_at: {{ item.created_at }}<br />
+    updated_at: {{ item.updated_at }}
+  </p>
+{% endblock %}
