@@ -17,10 +17,7 @@ clap = { version = "4", features = ["derive", "env", "wrap_help"] }
 futures-util = "0.3"
 minijinja = { version = "2", features = ["loader"] }
 minijinja-contrib = { version = "2", features = ["datetime"] }
-reqwest = { version = "0.13", default-features = false, features = [
-  "charset",
-  "json",
-] }
+reqwest = { version = "0.13", features = ["charset", "json"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 serde_urlencoded = "0.7"
